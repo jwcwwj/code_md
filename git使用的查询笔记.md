@@ -636,6 +636,17 @@ git reset --hard （git log查询出来的哈希值） # 回退到某一个历�
 git push -f # 强制提交(-f表示强制)
 ```
 
+```shell
+# git remote系列命令用于管理Git仓库的远程仓库，提供给了查看、添加、重命名和删除远程仓库的功能
+git remote # 列出当前仓库中已经配置的远程仓库
+git remote -v # 列出当前仓库中已经配置的远程仓库，并显示它们的URL
+git remote add <remote_name> <remote_url> # 添加一个新的远程仓库。指定一个远程仓库的名称和 URL，将其添加到当前仓库中。
+git remote rename <old_name> <new_name> # 将已配置的远程仓库重命名。
+git remote remove <remote_name> # 从当前仓库中删除指定的远程仓库。
+git remote set-url <remote_name> <new_url> # 修改指定远程仓库的 URL。
+git remote show <remote_name> # 显示指定远程仓库的详细信息，包括 URL 和跟踪分支
+```
+
 
 
 # 8.插件
@@ -644,3 +655,43 @@ gitLens
 
 Git history diff
 
+
+
+# 9.总结
+
+```shell
+# git clone ssh之后如何将文件上传到远程仓库？
+git add 文件名	# 添加文件到暂存区
+git commit -m "提交信息" # 提交文件到本地仓库
+git push 远程仓库名 分支名	# 推送到远程仓库（git push origin main）
+
+git pull 远程仓库名 分支名	# 从远程仓库拉取到工作区（git pull origin main）
+```
+
+```shell
+#网太差，无法push到远程仓库
+# 解决办法：使用ssh协议
+git remote set-url origin git@github.com:jwcwwj/code_md.git # 将远程苍鹭的URL更改为SSH URL
+git push origin main # 再次推送到远程仓库
+```
+
+```shell
+# 如何添加SSH秘钥到github账户？
+ssh-keygen -t rsa -b 4096 -C "邮箱"	# 本地生成一个SSH秘钥，生成之后SSH秘钥一般在~/.ssh目录下
+eval "$(ssh-agent -s)" # 启动SSH代理并设置相应的环境变量
+ssh -add -l # 检查SSH代理状态，检查SSH代理是否正在运行，并列出代理当前管理的秘钥
+ssh-add ~/.ssh/id_rsa # 添加SSH秘钥到SSH代理中（如果使用的是其他文件名，将id_rsa替换为你的私钥文件名）
+cat ~/.ssh/id_rsa.pub # 查看SHH公钥，然后复制下来
+最后，登录到你的 GitHub 账户，转到 Settings（设置） > SSH and GPG keys（SSH 和 GPG 密钥），然后点击 "New SSH key"（新 SSH 密钥）。在 "Title"（标题）字段中输入一个描述性的名称，然后粘贴你复制的公钥到 "Key"（密钥）字段中。最后，点击 "Add SSH key"（添加 SSH 密钥）。 # 添加SSH公钥到github账户
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDmYJXe+o7uZtGMKaSuO6GaJ4rE6xspy2HG4wXwdSpiGSQNv6UA6vdURo0jNKa/8MBmIujRTers9AO+df9Cw+rZCtlgamKERiMn2vVQwmAM6dXn8tL0wQhDjYJEzYTNQ4Jig96uMk3yILY9dwBP54kS1vCo7lXgX0KLxKq1PZgVf3orj4DUseFB8NIwWUxgca3wJptDGAfWOW2oZW0ZWIathxS6x2+SU/thm1OpCLFawzcJHauUWnFeIDIEANFhLCaq8QfP8xEt3RqAJhZ2G3w9Ux+Or2MoTBDR+co0TC6GGS28cyjMJv6DzUzQMp4ll63wi9zlENm4EmcIlw2B/bTzC3bRp/mBfYuud8a3h8kEg2s0YbW7t+r71ih+pambuEcPBZSavnAGlrU6QIU7b2c0RJBBqwmof5xJI9UCcluVXCSo8OmJ2CCBBWjq3BPzZcBUMpLrOE4HLeAImgVKpiIGKfhtA53NwCOeCaavrqR5qc1dvyUKfvBrJMWSwPxup9Lwe6XTzkSUv7A+0AVbn5JEWR3Q6zZrxna5qSPD3r+23peYJuDb/YYjrzyc0htTgl1ShGzCdnXhCVbrr5PFBNTy0PPQiRUAJy5FK/6YP09kLAeMYFbVaQj53soCKuBx5cPiD4kS/jmfAHWtt0ccWc4G2FVMRH9rURjBMca466gRhQ== 1982782238@qq.com" >> ~/.ssh/authorized_keys	# 添加
+# 完成以上步骤，你的SSH秘钥就会被添加到你的github账户中，现在就可以使用SSH协议推送到github仓库中
+```
+
+```shell
+# 测试SSH能否连接到github服务器
+ssh -T git@github.com # 测试连接。如果一切正常，你应该能够看到一条消息，表示你已经成功连接到 GitHub。
+```
+
+有的时候上传的文件有敏感信息也是无法上传的，比如个人隐私和个人访问令牌。
+
+还有子模块问题，这个还没有解决。
